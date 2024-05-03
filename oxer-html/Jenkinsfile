@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_IMAGE_NAME = 'bhimkumar/css-project'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from Git repository
+                git branch: 'main', url: 'https://github.com/Bhim-Kumar/css-test-project/'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                // Build Docker image
+                script {
+                    docker.build("bhimkumar/css-project:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+        
+        stage('Run Docker Container') {
+            steps {
+                // Run Docker container locally
+                script {
+                    docker.image("bhimkumar/css-project:${env.BUILD_NUMBER}").run("-p 8080:80 --rm")
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Deployment successful! Access your application at http://localhost:8080'
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+}
