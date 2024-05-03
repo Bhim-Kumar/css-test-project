@@ -8,17 +8,16 @@ How to trigger a cicd pipeline:
 we can trigger a cicd pipeline through github webhook and setting up jenkins git poll scm.
 
 Run the deployment script in cloud ecs service:
-# Login to Amazon ECR
-aws ecr get-login-password --region your-aws-region | docker login --username AWS --password-stdin your-aws-account-id.dkr.ecr.your-aws-region.amazonaws.com
+Step 1: Pull Docker Image from Docker Hub
+docker pull bhimkumar/css-project
 
-# Tag your Docker image
-docker tag your-docker-image:tag your-aws-account-id.dkr.ecr.your-aws-region.amazonaws.com/your-docker-image:tag
+Step 2: Update ECS Task Definition
+aws ecs register-task-definition --cli-input-json file:my-task-definition.json
 
-# Push your Docker image to Amazon ECR
-docker push your-aws-account-id.dkr.ecr.your-aws-region.amazonaws.com/your-docker-image:tag
+Step 3: Update ECS Service
+aws ecs update-service --cluster my-ecs-cluster --service my-ecs-service --my-definition my-task-family:my-task-revision
 
-Update ECS Task Definition with Docker Image
-aws ecs register-task-definition --cli-input-json file://your-task-definition.json
-
-Update ECS Service to use the new Task Definition
-aws ecs update-service --cluster your-ecs-cluster --service your-ecs-service --task-definition your-task-family:your-task-revision
+step 4: Configure a Load Balancer
+step 5: Register ECS Tasks with the Target Group
+Step 6: Configure Security Groups
+Step 7: Access Your Application
