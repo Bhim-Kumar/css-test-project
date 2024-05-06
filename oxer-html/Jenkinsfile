@@ -17,7 +17,7 @@ pipeline {
             steps {
                 // Build Docker image
                 script {
-                    docker.build("bhimkumar/css-project:${env.BUILD_NUMBER}")
+                    docker.build("${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 // Run Docker container locally
                 script {
-                    docker.image("bhimkumar/css-project:${env.BUILD_NUMBER}").run("-p 8080:80 --rm")
+                    docker.image("${env.DOCKER_IMAGE_NAME}t:${env.BUILD_NUMBER}").run("-p 8000:80 --rm")
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
     
     post {
         success {
-            echo 'Deployment successful! Access your application at http://localhost:8080'
+            echo 'Deployment successful! Access your application at http://localhost:8000'
         }
         failure {
             echo 'Deployment failed!'
